@@ -9,6 +9,7 @@ const Login = () => {
 
   const handleInputChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setErrorMessage(''); // Resetando erro ao digitar
   };
 
   const handleLogin = () => {
@@ -27,13 +28,14 @@ const Login = () => {
   };
 
   return (
-    <form>
+    <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
       <TextField 
         label="Email" 
         name="email" 
         onChange={handleInputChange} 
         fullWidth 
         margin="normal"
+        required
       />
       <TextField 
         type="password" 
@@ -42,6 +44,7 @@ const Login = () => {
         onChange={handleInputChange} 
         fullWidth 
         margin="normal"
+        required
       />
       {errorMessage && (
         <div style={{ color: 'red', marginBottom: '10px' }}>
@@ -54,7 +57,7 @@ const Login = () => {
           )}
         </div>
       )}
-      <Button onClick={handleLogin} variant="contained" color="primary" fullWidth>
+      <Button type="submit" variant="contained" color="primary" fullWidth>
         Entrar
       </Button>
     </form>
@@ -62,6 +65,7 @@ const Login = () => {
 };
 
 export default Login;
+
 
 
 

@@ -10,6 +10,7 @@ const SignUp = () => {
 
   const handleInputChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setError(''); // Resetando erro ao digitar
   };
 
   const handleSignUp = () => {
@@ -23,6 +24,12 @@ const SignUp = () => {
 
     if (!validate(form.cpf)) {
       setError('CPF inválido.');
+      return;
+    }
+
+    // Adicionando validações adicionais
+    if (!form.name || !form.password) {
+      setError('Por favor, preencha todos os campos.');
       return;
     }
 
@@ -43,6 +50,7 @@ const SignUp = () => {
         onChange={handleInputChange}
         fullWidth
         margin="normal"
+        required
       />
       <TextField
         label="Email"
@@ -50,6 +58,7 @@ const SignUp = () => {
         onChange={handleInputChange}
         fullWidth
         margin="normal"
+        required
       />
       <TextField
         type="password"
@@ -58,6 +67,7 @@ const SignUp = () => {
         onChange={handleInputChange}
         fullWidth
         margin="normal"
+        required
       />
       <TextField
         label="CPF"
@@ -65,6 +75,7 @@ const SignUp = () => {
         onChange={handleInputChange}
         fullWidth
         margin="normal"
+        required
       />
       <Button type="submit" variant="contained" color="primary" fullWidth>
         Cadastrar
@@ -74,4 +85,5 @@ const SignUp = () => {
 };
 
 export default SignUp;
+
 

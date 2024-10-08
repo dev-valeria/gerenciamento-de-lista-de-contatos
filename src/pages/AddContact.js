@@ -1,104 +1,205 @@
 import React, { useState } from 'react';
+import { cpf } from 'cpf-cnpj-validator';
 
-function AddContact({ onAddContact, contact }) {
-  const [name, setName] = useState(contact?.name || "");
-  const [cpf, setCpf] = useState(contact?.cpf || "");
-  const [phone, setPhone] = useState(contact?.phone || "");
-  const [address, setAddress] = useState(contact?.address || { street: "", city: "", state: "", cep: "", lat: "", lng: "" });
+const AddContact = ({ onAddContact }) => {
+  const [contact, setContact] = useState({
+    name: '',
+    cpf: '',
+    phone: '',
+    address: {
+      cep: '',
+      street: '',
+      complement: '',
+      city: '',
+      state: '',
+      lat: '',
+      lng: ''
+    }
+  });
+  const [feedback, setFeedback] = useState('');
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name.startsWith('address.')) {
+      const addressField = name.split('.')[1];
+      setContact(prevContact => ({
+        ...prevContact,
+        address: {
+          ...prevContact.address,
+          [addressField]: value
+        }
+      }));
+    } else {
+      setContact(prevContact => ({
+        ...prevContact,
+        [name]: value
+      }));
+    }
+  };
+
+  const fetchAddressByCep = async (cep) => {
+    const cleanCep = cep.replace(/\D/g, '');
+    if (cleanCep.length !== 8) {
+      setFeedback('CEP inválido.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cleanCep}/json/`);
+      const data = await response.json();
+
+      if (data.erro) {
+        setFeedback('CEP não encontrado.');
+        setContact(prevContact => ({
+          ...prevContact,
+          address: {
+            ...prevContact.address,
+            street: '',
+            city: '',
+            state: ''
+          }
+        }));
+      } else {
+        setContact(prevContact => ({
+          ...prevContact,
+          address: {
+            ...prevContact.address,
+            street: data.logradouro,
+            city: data.localidade,
+            state: data.uf
+          }
+        }));
+        setFeedback('');
+      }
+    } catch (error) {
+      setFeedback('Erro ao buscar o CEP.');
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (onAddContact) {
-      const newContact = { name, cpf, phone, address };
-      onAddContact(newContact);
-    } else {
-      console.error("Função onAddContact não foi passada!");
+    // Validação do CPF
+    if (!cpf.isValid(contact.cpf)) {
+      setFeedback('CPF inválido. Por favor, insira um CPF válido.');
+      return;
     }
+
+    // Enviar o novo contato para o componente pai
+    onAddContact(contact);
+
+    // Resetar o formulário
+    setContact({
+      name: '',
+      cpf: '',
+      phone: '',
+      address: {
+        cep: '',
+        street: '',
+        complement: '',
+        city: '',
+        state: '',
+        lat: '',
+        lng: ''
+      }
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Nome:</label>
+    <div>
+      <h2>Adicionar Contato</h2>
+      {feedback && <p>{feedback}</p>}
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label>CPF:</label>
-        <input
-          type="text"
-          value={cpf}
-          onChange={(e) => setCpf(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label>Telefone:</label>
-        <input
-          type="text"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label>Endereço:</label>
-        <input
-          type="text"
-          placeholder="Rua"
-          value={address.street}
-          onChange={(e) => setAddress({ ...address, street: e.target.value })}
+          name="name"
+          placeholder="Nome"
+          value={contact.name}
+          onChange={handleChange}
           required
         />
         <input
           type="text"
-          placeholder="Cidade"
-          value={address.city}
-          onChange={(e) => setAddress({ ...address, city: e.target.value })}
+          name="cpf"
+          placeholder="CPF"
+          value={contact.cpf}
+          onChange={handleChange}
           required
         />
         <input
           type="text"
-          placeholder="Estado"
-          value={address.state}
-          onChange={(e) => setAddress({ ...address, state: e.target.value })}
+          name="phone"
+          placeholder="Telefone"
+          value={contact.phone}
+          onChange={handleChange}
           required
         />
         <input
           type="text"
+          name="address.cep"
           placeholder="CEP"
-          value={address.cep}
-          onChange={(e) => setAddress({ ...address, cep: e.target.value })}
+          value={contact.address.cep}
+          onChange={(e) => {
+            handleChange(e);
+            fetchAddressByCep(e.target.value);
+          }}
           required
         />
-      </div>
-      <div>
-        <label>Posição Geográfica:</label>
         <input
           type="text"
+          name="address.street"
+          placeholder="Rua"
+          value={contact.address.street}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="address.complement"
+          placeholder="Complemento"
+          value={contact.address.complement}
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          name="address.city"
+          placeholder="Cidade"
+          value={contact.address.city}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="address.state"
+          placeholder="Estado"
+          value={contact.address.state}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="address.lat"
           placeholder="Latitude"
-          value={address.lat}
-          onChange={(e) => setAddress({ ...address, lat: e.target.value })}
-          required
+          value={contact.address.lat}
+          onChange={handleChange}
         />
         <input
           type="text"
+          name="address.lng"
           placeholder="Longitude"
-          value={address.lng}
-          onChange={(e) => setAddress({ ...address, lng: e.target.value })}
-          required
+          value={contact.address.lng}
+          onChange={handleChange}
         />
-      </div>
-      <button type="submit">Salvar Contato</button>
-    </form>
+        <button type="submit">Adicionar Contato</button>
+      </form>
+    </div>
   );
-}
+};
 
 export default AddContact;
+
+
+
 
 

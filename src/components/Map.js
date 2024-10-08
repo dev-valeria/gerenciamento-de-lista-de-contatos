@@ -6,10 +6,10 @@ const Map = ({ center, markersData }) => {
   useEffect(() => {
     const loadGoogleMapsScript = () => {
       const existingScript = document.querySelector('script[src*="maps.googleapis"]');
-      
+
       if (!existingScript) {
         const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAYa2Mz7YZ0DmVmBE9HrHjGQcK-IHijzeI&callback=initMap&libraries=places`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap&libraries=places`;
         script.async = true;
         document.head.appendChild(script);
         script.onload = () => {
@@ -30,12 +30,15 @@ const Map = ({ center, markersData }) => {
         zoom: 10,
       });
 
-      markersData.forEach(marker => {
-        new window.google.maps.Marker({
-          position: marker.position,
-          map,
+      // Limpa os marcadores anteriores
+      if (markersData) {
+        markersData.forEach(marker => {
+          new window.google.maps.Marker({
+            position: marker.position,
+            map,
+          });
         });
-      });
+      }
     };
 
     loadGoogleMapsScript();
@@ -49,3 +52,4 @@ const Map = ({ center, markersData }) => {
 };
 
 export default Map;
+

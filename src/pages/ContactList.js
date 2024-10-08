@@ -1,47 +1,78 @@
-import React, { useState, useEffect } from 'react';
-import AddContact from './AddContact';
-import Map from '../components/Map';
+import React, { useState } from 'react';
+import { TextField, Button, Typography, List, ListItem, ListItemText, Paper } from '@mui/material';
+import Map from '../components/Map'; 
 
-const ContactList = () => {
-  const [contacts, setContacts] = useState([]);
-  const [selectedContact, setSelectedContact] = useState(null);
+function ContactList({ contacts, onAddContact }) {
+  const [filter, setFilter] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc');
+  const [selectedContact, setSelectedContact] = useState(null); // Estado para contato selecionado
 
-  useEffect(() => {
-    const storedContacts = JSON.parse(localStorage.getItem('contacts')) || [];
-    setContacts(storedContacts);
-  }, []); 
-
-  const handleAddContact = (newContact) => {
-    setContacts([...contacts, newContact]);
-    localStorage.setItem('contacts', JSON.stringify([...contacts, newContact]));
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
   };
 
+  const handleSortOrderChange = () => {
+    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+  };
+
+  const filteredContacts = contacts
+    .filter(contact => 
+      contact.name.toLowerCase().includes(filter.toLowerCase()) ||
+      contact.cpf.includes(filter)
+    )
+    .sort((a, b) => {
+      return sortOrder === 'asc'
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name);
+    });
+
   const handleContactClick = (contact) => {
-    setSelectedContact(contact);
+    setSelectedContact(contact); // Atualiza o contato selecionado ao clicar
   };
 
   return (
-    <div>
-      <AddContact onAddContact={handleAddContact} />
-      <Map contacts={contacts} onContactClick={handleContactClick} />
-      {selectedContact && (
-        <div>
-          <h2>Contato Selecionado:</h2>
-          <p>{selectedContact.name}</p>
-          <p>{selectedContact.address.street}, {selectedContact.address.city} - {selectedContact.address.uf}</p>
-        </div>
-      )}
-      <ul>
-        {contacts.map(contact => (
-          <li key={contact.id}>
-            {contact.name} - {contact.cpf}
-          </li>
+    <Paper elevation={3} style={{ padding: '20px' }}>
+      <Typography variant="h4" align="center" gutterBottom>
+        Gerenciador de Contatos
+      </Typography>
+      <TextField
+        variant="outlined"
+        placeholder="Filtrar por nome ou CPF"
+        value={filter}
+        onChange={handleFilterChange}
+        fullWidth
+        style={{ marginBottom: '20px' }}
+      />
+      <Button 
+        variant="contained" 
+        color="primary" 
+        onClick={handleSortOrderChange}
+        style={{ marginBottom: '20px' }}
+      >
+        Ordenar {sortOrder === 'asc' ? 'Decrescente' : 'Crescente'}
+      </Button>
+      <List>
+        {filteredContacts.map(contact => (
+          <ListItem key={contact.cpf} button onClick={() => handleContactClick(contact)}>
+            <ListItemText primary={contact.name} secondary={contact.cpf} />
+          </ListItem>
         ))}
-      </ul>
-    </div>
+      </List>
+
+      {selectedContact && (
+        <Map 
+          center={{ lat: selectedContact.address.lat, lng: selectedContact.address.lng }} 
+          markersData={[{ position: { lat: selectedContact.address.lat, lng: selectedContact.address.lng } }]} 
+        />
+      )}
+    </Paper>
   );
-};
+}
 
 export default ContactList;
+
+
+
+
 
 

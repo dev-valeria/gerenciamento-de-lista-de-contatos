@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { cpf } from 'cpf-cnpj-validator'; // Importando corretamente
+import { cpf } from 'cpf-cnpj-validator'; 
 import AddContact from './pages/AddContact';
 import Map from './components/Map';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
+import ContactList from './pages/ContactList'; 
+import './App.css'; // Importar o CSS personalizado
 
 function App() {
   const [contacts, setContacts] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  const [feedback, setFeedback] = useState(""); // Estado para mensagens de feedback
-  const [filter, setFilter] = useState(''); // Estado para o filtro
-  const [sortOrder, setSortOrder] = useState('asc'); // Estado para a ordenação
-  const [passwordInput, setPasswordInput] = useState(""); // Estado para a senha do usuário
+  const [feedback, setFeedback] = useState("");
 
   useEffect(() => {
     const storedContacts = JSON.parse(localStorage.getItem('contacts')) || [];
@@ -48,26 +47,23 @@ function App() {
     alert("Logout realizado com sucesso.");
   };
 
-  // Validação da senha antes de excluir a conta
   const handleDeleteAccount = () => {
     if (!currentUser) {
       alert("Nenhum usuário está logado.");
       return;
     }
 
-    const enteredPassword = prompt("Digite sua senha para excluir a conta:"); // Solicita a senha do usuário
+    const enteredPassword = prompt("Digite sua senha para excluir a conta:");
 
     if (enteredPassword !== currentUser.password) {
       alert("Senha incorreta. A conta não foi excluída.");
       return;
     }
 
-    // Se a senha estiver correta, proceder com a exclusão
     const users = JSON.parse(localStorage.getItem('users')) || [];
     const updatedUsers = users.filter(user => user.email !== currentUser.email);
     localStorage.setItem('users', JSON.stringify(updatedUsers));
 
-    // Remove os contatos associados ao usuário
     const updatedContacts = contacts.filter(contact => contact.userEmail !== currentUser.email);
     setContacts(updatedContacts);
     localStorage.setItem('contacts', JSON.stringify(updatedContacts));
@@ -78,32 +74,13 @@ function App() {
     alert("Conta excluída com sucesso.");
   };
 
-  // Filtro de contatos por nome ou CPF
-  const filteredContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(filter.toLowerCase()) || 
-    contact.cpf.includes(filter)
-  );
-
-  // Função de ordenação
-  const sortedContacts = filteredContacts.sort((a, b) => {
-    if (sortOrder === 'asc') {
-      return a.name.localeCompare(b.name); // Ordena por nome crescente
-    } else {
-      return b.name.localeCompare(a.name); // Ordena por nome decrescente
-    }
-  });
-
-  const toggleSortOrder = () => {
-    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-  };
-
   const center = { lat: -23.5505, lng: -46.6333 };
 
   return (
     <Router>
-      <div>
-        <h1>Gerenciador de Contatos</h1>
-        {feedback && <p>{feedback}</p>} {/* Exibindo mensagens de feedback */}
+      <div className="container mt-5">
+        <h1 className="text-center">Gerenciador de Contatos</h1>
+        {feedback && <div className="alert alert-warning">{feedback}</div>}
         <Routes>
           <Route 
             path="/login" 
@@ -118,44 +95,23 @@ function App() {
             element={isAuthenticated ? (
               <>
                 <AddContact onAddContact={handleAddContact} />
-                <Map
-                  center={center}
-                  markersData={contacts.map(contact => ({
-                    position: {
-                      lat: parseFloat(contact.address?.lat) || center.lat,
-                      lng: parseFloat(contact.address?.lng) || center.lng,
-                    },
-                  }))} 
-                />
+                <Map center={center} markersData={contacts.map(contact => ({
+                  position: {
+                    lat: parseFloat(contact.address?.lat) || center.lat,
+                    lng: parseFloat(contact.address?.lng) || center.lng,
+                  },
+                }))} />
+                
+                <ContactList contacts={contacts} />
 
-                {/* Campo de busca para filtrar por CPF ou nome */}
-                <input
-                  type="text"
-                  placeholder="Filtrar por CPF ou Nome"
-                  value={filter}
-                  onChange={(e) => setFilter(e.target.value)}
-                />
-
-                {/* Botão para alternar entre crescente e decrescente */}
-                <button onClick={toggleSortOrder}>
-                  Ordenar {sortOrder === 'asc' ? 'Decrescente' : 'Crescente'}
-                </button>
-
-                {/* Lista de contatos filtrada e ordenada */}
-                <ul>
-                  {sortedContacts.map(contact => (
-                    <li key={contact.id}>
-                      {contact.name} - {contact.cpf} - {contact.phone} - {contact.address?.cep}
-                    </li>
-                  ))}
-                </ul>
-
-                <button onClick={handleLogout}>Logout</button>
-                <button onClick={handleDeleteAccount}>Excluir Conta</button>
+                <div className="d-flex justify-content-between mt-4">
+                  <button className="btn btn-primary" onClick={handleLogout}>Logout</button>
+                  <button className="btn btn-danger" onClick={handleDeleteAccount}>Excluir Conta</button>
+                </div>
               </>
             ) : (
               <Navigate to="/login" />
-            )}
+            )} 
           />
           <Route path="/" element={<Navigate to="/login" />} />
         </Routes>
@@ -165,6 +121,8 @@ function App() {
 }
 
 export default App;
+
+
 
 
 
