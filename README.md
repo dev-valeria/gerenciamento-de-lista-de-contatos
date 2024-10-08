@@ -32,20 +32,24 @@ Para instalar e executar o projeto, siga os passos abaixo:
 
   ```bash
    npm install
+ ```
 
 6. **Crie um arquivo .env na raiz do projeto e adicione sua chave da API do Google Maps:**
 
  ```bash
    REACT_APP_GOOGLE_MAPS_API_KEY=YOUR_GOOGLE_MAPS_API_KEY
+ ```
    
 7. **Inicie o aplicativo:**
 
  ```bash
    npm start
+ ```
 
 8. **Acesse o aplicativo no seu navegador em**
 
  ```bash
 http://localhost:3000
+ ```
    
    
