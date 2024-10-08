@@ -8,6 +8,14 @@ Este projeto é um aplicativo de gerenciamento de contatos que permite adicionar
 - **Material-UI**: Biblioteca de componentes React que implementa o Material Design.
 - **Google Maps JavaScript API**: API para exibir mapas interativos e funcionalidades relacionadas.
 
+## Pré-requisitos
+
+- Ter conhecimento em linguagem JavaScript ES6+ e ReactJs.
+- Saber como funcionam APIs REST/RESTFul.
+- Saber utilizar LocalStorage ou SharedPreferences ou Sqlite.
+- Conhecimento em versionamento de código com GIT.
+
+
 ## Estrutura do Projeto
 
 /contact-manager ├── /public │ ├── index.html │ └── favicon.ico ├── /src │ ├── /components │ │ ├── ContactList.js │ │ └── GoogleMap.js │ ├── /pages │ │ ├── AddContact.js │ │ └── ContactDetails.js │ ├── App.js │ ├── index.js │ ├── App.css │ └── index.css ├── package.json └── README.md
@@ -51,5 +59,20 @@ Para instalar e executar o projeto, siga os passos abaixo:
  ```bash
 http://localhost:3000
  ```
-   
+## Funcionalidades
+
+- **Adicionar Contato**: Permite adicionar novos contatos com nome e CPF.
+- **Listar Contatos**: Exibe uma lista de contatos cadastrados.
+- **Filtrar Contatos**: Permite filtrar a lista de contatos por nome ou CPF.
+- **Ordenar Contatos**: Permite alternar a ordem de exibição dos contatos (crescente/decrescente).
+- **Integração com Google Maps**: Exibe um mapa interativo para cada contato adicionado.
+- **Gerenciar sua lista de contatos**: Permite editar e excluir contatos.
+- **Realizar pesquisa de endereço**: Ajuda no cadastro de contatos.
+- **Excluir a sua própria conta**: Funcionalidade para gerenciamento de contas.
+
+## Contato
+**Para dúvidas ou sugestões, entre em contato:**
+
+**Nome:** Valéria Melo
+**Email:** seu-email@example.com
    
