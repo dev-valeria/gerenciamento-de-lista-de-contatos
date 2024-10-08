@@ -26,6 +26,7 @@ Para instalar e executar o projeto, siga os passos abaixo:
    
     ```bash
    cd gerenciamento-de-lista-de-contatos
+     ```
 
 4. **Instale as dependências:**
 
