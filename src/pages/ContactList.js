@@ -1,35 +1,31 @@
-// src/pages/ContactList.js
-import React, { useState, useEffect } from 'react';
-import { TextField, Button } from '@mui/material';
-import ContactItem from '../components/ContactItem';
+import React, { useState } from 'react';
+import AddContact from './AddContact';
+import Map from '../components/Map';
 
 const ContactList = () => {
-  const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState('');
+  const [contacts, setContacts] = useState(JSON.parse(localStorage.getItem('contacts')) || []);
+  const [selectedContact, setSelectedContact] = useState(null);
 
-  useEffect(() => {
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-    const allContacts = JSON.parse(localStorage.getItem('contacts')) || [];
-    const userContacts = allContacts.filter(contact => contact.userId === loggedInUser.email);
-    setContacts(userContacts);
-  }, []);
-
-  const handleFilterChange = (e) => {
-    setFilter(e.target.value);
+  const handleAddContact = (newContact) => {
+    setContacts([...contacts, newContact]);
   };
 
-  const filteredContacts = contacts.filter(contact =>
-    contact.name.includes(filter) || contact.cpf.includes(filter)
-  );
+  const handleContactClick = (contact) => {
+    setSelectedContact(contact);
+    // Centralizar o mapa no contato clicado
+  };
 
   return (
     <div>
-      <TextField label="Buscar por Nome ou CPF" onChange={handleFilterChange} />
-      <div>
-        {filteredContacts.map(contact => (
-          <ContactItem key={contact.id} contact={contact} />
-        ))}
-      </div>
+      <AddContact onAddContact={handleAddContact} />
+      <Map contacts={contacts} onContactClick={handleContactClick} />
+      {selectedContact && (
+        <div>
+          <h2>Contato Selecionado:</h2>
+          <p>{selectedContact.name}</p>
+          <p>{selectedContact.address.street}, {selectedContact.address.city} - {selectedContact.address.uf}</p>
+        </div>
+      )}
     </div>
   );
 };
