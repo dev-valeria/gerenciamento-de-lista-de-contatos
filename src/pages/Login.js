@@ -21,7 +21,6 @@ const Login = () => {
       localStorage.setItem('loggedInUser', JSON.stringify(user));
       navigate('/contacts');
     } else {
-      // Verificar se o email existe para sugerir o cadastro
       const emailExists = users.some(user => user.email === form.email);
       setErrorMessage(emailExists ? 'Senha incorreta. Tente novamente.' : 'Email não encontrado. Deseja se cadastrar?');
     }
