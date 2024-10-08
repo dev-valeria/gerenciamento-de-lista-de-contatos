@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ onLoginSuccess }) => {
   const [form, setForm] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -18,19 +19,39 @@ const Login = () => {
 
     if (user) {
       localStorage.setItem('loggedInUser', JSON.stringify(user));
-      navigate('/contacts');
+      onLoginSuccess(); // Atualiza o estado de autenticação no App
+      navigate('/contacts'); // Redireciona para a página de contatos
     } else {
-      alert('Email ou senha incorretos');
+      setError('Email ou senha incorretos');
     }
   };
 
   return (
-    <form>
-      <TextField label="Email" name="email" onChange={handleInputChange} />
-      <TextField type="password" label="Senha" name="password" onChange={handleInputChange} />
-      <Button onClick={handleLogin}>Entrar</Button>
+    <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+      {error && <div style={{ color: 'red' }}>{error}</div>}
+      <TextField
+        label="Email"
+        name="email"
+        onChange={handleInputChange}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        type="password"
+        label="Senha"
+        name="password"
+        onChange={handleInputChange}
+        fullWidth
+        margin="normal"
+      />
+      <Button type="submit" variant="contained" color="primary" fullWidth>
+        Entrar
+      </Button>
     </form>
   );
 };
 
 export default Login;
+
+
+
