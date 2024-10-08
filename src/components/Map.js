@@ -1,39 +1,57 @@
-import React from 'react';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import PropTypes from 'prop-types';
+import React, { useEffect, useRef } from 'react';
 
 const Map = ({ center, markersData }) => {
-  return (
-    <LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
-      <GoogleMap
-        mapContainerStyle={{ height: "400px", width: "100%" }}
-        center={center}
-        zoom={10}
-      >
-        {markersData.map((marker, index) => (
-          <Marker key={`${marker.position.lat},${marker.position.lng}`} position={marker.position} />
-        ))}
-      </GoogleMap>
-    </LoadScript>
-  );
-};
+  const mapRef = useRef(null);
 
-// Adicionando a validação de props
-Map.propTypes = {
-  center: PropTypes.shape({
-    lat: PropTypes.number.isRequired,
-    lng: PropTypes.number.isRequired,
-  }).isRequired,
-  markersData: PropTypes.arrayOf(
-    PropTypes.shape({
-      position: PropTypes.shape({
-        lat: PropTypes.number.isRequired,
-        lng: PropTypes.number.isRequired,
-      }).isRequired,
-    })
-  ).isRequired,
+  useEffect(() => {
+    // Função para carregar o script do Google Maps
+    const loadGoogleMapsScript = () => {
+      const existingScript = document.querySelector('script[src*="maps.googleapis"]');
+      
+      if (!existingScript) {
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAYa2Mz7YZ0DmVmBE9HrHjGQcK-IHijzeI&callback=initMap&libraries=places`;
+        script.async = true;
+        document.head.appendChild(script);
+        script.onload = () => {
+          window.initMap();
+        };
+      } else if (window.google && window.google.maps) {
+        // Se o script já foi carregado, inicializa o mapa
+        window.initMap();
+      }
+    };
+
+    // Inicializa o mapa e os marcadores
+    window.initMap = () => {
+      if (!window.google || !mapRef.current) {
+        return;
+      }
+
+      const map = new window.google.maps.Map(mapRef.current, {
+        center,
+        zoom: 10,
+      });
+
+      // Adiciona os marcadores no mapa
+      markersData.forEach(marker => {
+        new window.google.maps.Marker({
+          position: marker.position,
+          map,
+        });
+      });
+    };
+
+    // Chama a função para carregar o script da API
+    loadGoogleMapsScript();
+
+    // Limpeza ao desmontar o componente
+    return () => {
+      delete window.initMap;
+    };
+  }, [center, markersData]);
+
+  return <div ref={mapRef} style={{ height: '400px', width: '100%' }} />;
 };
 
 export default Map;
-
-
