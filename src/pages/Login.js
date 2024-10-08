@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const Login = ({ onLoginSuccess }) => {
+const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -19,32 +19,43 @@ const Login = ({ onLoginSuccess }) => {
 
     if (user) {
       localStorage.setItem('loggedInUser', JSON.stringify(user));
-      onLoginSuccess(); // Atualiza o estado de autenticação no App
-      navigate('/contacts'); // Redireciona para a página de contatos
+      navigate('/contacts');
     } else {
-      setError('Email ou senha incorretos');
+      // Verificar se o email existe para sugerir o cadastro
+      const emailExists = users.some(user => user.email === form.email);
+      setErrorMessage(emailExists ? 'Senha incorreta. Tente novamente.' : 'Email não encontrado. Deseja se cadastrar?');
     }
   };
 
   return (
-    <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
-      <TextField
-        label="Email"
-        name="email"
-        onChange={handleInputChange}
-        fullWidth
+    <form>
+      <TextField 
+        label="Email" 
+        name="email" 
+        onChange={handleInputChange} 
+        fullWidth 
         margin="normal"
       />
-      <TextField
-        type="password"
-        label="Senha"
-        name="password"
-        onChange={handleInputChange}
-        fullWidth
+      <TextField 
+        type="password" 
+        label="Senha" 
+        name="password" 
+        onChange={handleInputChange} 
+        fullWidth 
         margin="normal"
       />
-      <Button type="submit" variant="contained" color="primary" fullWidth>
+      {errorMessage && (
+        <div style={{ color: 'red', marginBottom: '10px' }}>
+          {errorMessage}
+          <br />
+          {errorMessage.includes('Deseja se cadastrar?') && (
+            <Button onClick={() => navigate('/signup')} style={{ marginTop: '10px' }}>
+              Fazer Cadastro
+            </Button>
+          )}
+        </div>
+      )}
+      <Button onClick={handleLogin} variant="contained" color="primary" fullWidth>
         Entrar
       </Button>
     </form>
@@ -52,6 +63,7 @@ const Login = ({ onLoginSuccess }) => {
 };
 
 export default Login;
+
 
 
 
