@@ -23,16 +23,28 @@ Para instalar e executar o projeto, siga os passos abaixo:
    git clone https://github.com/dev-valeria/gerenciamento-de-lista-de-contatos.git
    
 2. **Navegue até o diretório do projeto:**
+   
+    ```bash
    cd gerenciamento-de-lista-de-contatos
 
-3. Instale as dependências:
+4. **Instale as dependências:**
+
+  ```bash
    npm install
 
-4. **Crie um arquivo .env na raiz do projeto e adicione sua chave da API do Google Maps:**
+6. **Crie um arquivo .env na raiz do projeto e adicione sua chave da API do Google Maps:**
+
+ ```bash
    REACT_APP_GOOGLE_MAPS_API_KEY=YOUR_GOOGLE_MAPS_API_KEY
    
-5. **Inicie o aplicativo:**
+7. **Inicie o aplicativo:**
+
+ ```bash
    npm start
-6. **Acesse o aplicativo no seu navegador em http://localhost:3000.**
+
+8. **Acesse o aplicativo no seu navegador em**
+
+ ```bash
+http://localhost:3000
    
    
