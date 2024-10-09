@@ -1,46 +1,78 @@
-# Getting Started with Create React App
+# Gerenciamento de Lista de Contatos
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este projeto é um aplicativo de gerenciamento de contatos que permite adicionar, listar e filtrar contatos. O aplicativo utiliza a API do Google Maps para fornecer recursos geográficos, como a exibição de mapas.
 
-## Available Scripts
+## Tecnologias Utilizadas
 
-In the project directory, you can run:
+- **React**: Biblioteca JavaScript para construção de interfaces de usuário.
+- **Material-UI**: Biblioteca de componentes React que implementa o Material Design.
+- **Google Maps JavaScript API**: API para exibir mapas interativos e funcionalidades relacionadas.
 
-### `npm start`
+## Pré-requisitos
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Ter conhecimento em linguagem JavaScript ES6+ e ReactJs.
+- Saber como funcionam APIs REST/RESTFul.
+- Saber utilizar LocalStorage ou SharedPreferences ou Sqlite.
+- Conhecimento em versionamento de código com GIT.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `npm test`
+## Estrutura do Projeto
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+/contact-manager ├── /public │ ├── index.html │ └── favicon.ico ├── /src │ ├── /components │ │ ├── ContactList.js │ │ └── GoogleMap.js │ ├── /pages │ │ ├── AddContact.js │ │ └── ContactDetails.js │ ├── App.js │ ├── index.js │ ├── App.css │ └── index.css ├── package.json └── README.md
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Instalação
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Para instalar e executar o projeto, siga os passos abaixo:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. **Clone o repositório**:
 
-### `npm run eject`
+   ```bash
+   git clone https://github.com/dev-valeria/gerenciamento-de-lista-de-contatos.git
+   
+2. **Navegue até o diretório do projeto:**
+   
+    ```bash
+   cd gerenciamento-de-lista-de-contatos
+     ```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+4. **Instale as dependências:**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  ```bash
+   npm install
+ ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+6. **Crie um arquivo .env na raiz do projeto e adicione sua chave da API do Google Maps:**
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+ ```bash
+   REACT_APP_GOOGLE_MAPS_API_KEY=YOUR_GOOGLE_MAPS_API_KEY
+ ```
+   
+7. **Inicie o aplicativo:**
 
-## Learn More
+ ```bash
+   npm start
+ ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+8. **Acesse o aplicativo no seu navegador em**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+ ```bash
+http://localhost:3000
+ ```
+## Funcionalidades
+
+- **Adicionar Contato**: Permite adicionar novos contatos com nome e CPF.
+- **Listar Contatos**: Exibe uma lista de contatos cadastrados.
+- **Filtrar Contatos**: Permite filtrar a lista de contatos por nome ou CPF.
+- **Ordenar Contatos**: Permite alternar a ordem de exibição dos contatos (crescente/decrescente).
+- **Integração com Google Maps**: Exibe um mapa interativo para cada contato adicionado.
+- **Gerenciar sua lista de contatos**: Permite editar e excluir contatos.
+- **Realizar pesquisa de endereço**: Ajuda no cadastro de contatos.
+- **Excluir a sua própria conta**: Funcionalidade para gerenciamento de contas.
+
+## Contato
+**Para dúvidas ou sugestões, entre em contato:**
+
+**Nome:** Valéria Melo
+**Email:** valeriamelo.dev@gmail.com
+   
