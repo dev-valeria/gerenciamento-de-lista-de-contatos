@@ -16,9 +16,5 @@ root.render(
   </React.StrictMode>
 );
 
-// Se você quiser começar a medir o desempenho do seu aplicativo, 
-// passe uma função para registrar os resultados 
-// (por exemplo: reportWebVitals(console.log)) 
-// ou envie para um endpoint de análise.
 reportWebVitals();
 

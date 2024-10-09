@@ -6,7 +6,7 @@ import Map from './components/Map';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import ContactList from './pages/ContactList'; 
-import './App.css'; // Importar o CSS personalizado
+import './App.css'; 
 
 function App() {
   const [contacts, setContacts] = useState([]);
