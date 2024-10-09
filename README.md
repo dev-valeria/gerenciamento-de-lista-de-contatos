@@ -74,5 +74,5 @@ http://localhost:3000
 **Para dúvidas ou sugestões, entre em contato:**
 
 **Nome:** Valéria Melo
-**Email:** seu-email@example.com
+**Email:** valeriamelo.dev@gmail.com
    
